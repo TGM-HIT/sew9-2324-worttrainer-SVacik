@@ -7,11 +7,21 @@ jobs:
     steps:
       - name: Checkout project sources
         uses: actions/checkout@v3
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+
       - name: Run Tests
         run: gradle test
+
       - name: Create Javadoc
         run: gradle javadoc
+
       - name: Build Jar
         run: gradle jar
+
+      - name: Upload Javadoc as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: javadoc
+          path: build/docs/javadoc
