@@ -16,8 +16,3 @@ jobs:
 
       - name: Create Javadoc
         run: gradle javadoc
-
-      - name: Upload Javadoc as Artifact
-        with:
-          name: javadoc
-          path: build/docs/javadoc
