@@ -1,0 +1,38 @@
+name: Java Build and Test
+
+on:
+  push:
+    branches:
+      - main  # Passen Sie dies an, wenn Ihr Hauptzweig einen anderen Namen hat
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest  # Verwenden Sie die neueste Ubuntu-Laufzeitumgebung
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2  # Aktion zum Auschecken des Repository-Codes
+
+    - name: Build with Gradle
+      run: ./gradlew build  # Gradle Build ausführen
+
+    - name: Run Tests
+      run: ./gradlew test  # Gradle-Tests ausführen
+
+    - name: Generate JavaDocs
+      run: ./gradlew javadoc  # JavaDocs generieren
+
+    - name: Publish JavaDocs
+      if: success()  # Veröffentlichen Sie die JavaDocs nur, wenn der vorherige Schritt erfolgreich war
+      run: |
+        mkdir -p docs
+        cp -r build/docs/javadoc/* docs/
+      # Hier können Sie die JavaDocs auf GitHub Pages oder ein anderes Hosting-Service hochladen
+
+    - name: Upload Artifacts
+      if: success()  # Laden Sie Artefakte nur hoch, wenn der vorherige Schritt erfolgreich war
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifacts
+        path: build/libs  # Sie können das Verzeichnis entsprechend Ihrem Build-Konfiguration anpassen
